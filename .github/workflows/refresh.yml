@@ -55,9 +55,20 @@ jobs:
             git commit -m "chore: refresh Kiryat Shmona prices $(date -u +%Y-%m-%d)"
             git push
           fi
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      # Creating the Pages site itself needs Administration write or a UI click.
+      # If Pages is not enabled yet, keep the data refresh green and skip deploy.
+      - id: pagescfg
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+      - if: steps.pagescfg.outcome == 'success'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: web
       - id: deployment
+        if: steps.pagescfg.outcome == 'success'
         uses: actions/deploy-pages@v4
+      - if: steps.pagescfg.outcome != 'success'
+        run: |
+          echo "::warning::GitHub Pages is not enabled, so the catalog was refreshed but not deployed."
+          echo "Enable Pages at https://github.com/benjamendro/ks-shop/settings/pages (Source: GitHub Actions),"
+          echo "or grant the fine-grained token Administration: Read and write so POST /repos/.../pages can enable it."
