@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <script>
+    /* GitHub project Pages lives at /ks-shop/. A URL without the trailing
+       slash would resolve relative assets against the site root and break. */
+    (function () {
+      var path = location.pathname;
+      var last = path.split("/").pop();
+      if (path.slice(-1) !== "/" && last.indexOf(".") === -1) {
+        location.replace(path + "/" + location.search + location.hash);
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1f7a4d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="הסל הזול" />
+  <meta name="description" content="השוואת מחירי סופרים בקריית שמונה — בונים רשימת קניות ומגלים איפה הכי זול." />
+  <title>הסל הזול — קריית שמונה</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot" aria-live="polite">
+    <img class="logo" src="icons/icon-192.png" alt="" />
+    <h1>הסל הזול</h1>
+    <p>טוען את קטלוג הסופרים בקריית שמונה…</p>
+    <div class="progress" aria-hidden="true"><span id="boot-bar"></span></div>
+    <p id="boot-msg" style="font-size:0.85rem"></p>
+  </div>
+
+  <div class="app" id="app">
+    <div class="wrap">
+      <header class="topbar">
+        <div class="topbar-row">
+          <div class="brand">
+            <img src="icons/icon-192.png" alt="" />
+            <div>
+              <h1>הסל הזול</h1>
+              <small>השוואת מחירים בקריית שמונה</small>
+            </div>
+          </div>
+          <div class="as-of" id="as-of" title="תאריך קובץ המחירים"></div>
+        </div>
+        <div class="search-wrap" id="search-wrap">
+          <span class="ico" aria-hidden="true">🔍</span>
+          <input id="q" type="search" enterkeyhint="search" placeholder="חיפוש לפי שם, יצרן או ברקוד" autocomplete="off" />
+          <button class="clear" id="q-clear" type="button" aria-label="ניקוי חיפוש">×</button>
+        </div>
+      </header>
+
+      <div class="cats" id="cats" hidden></div>
+      <div class="subs" id="subs"></div>
+
+      <main class="main">
+        <section class="panel active" id="panel-catalog" data-panel="catalog">
+          <div class="meta-line">
+            <span id="catalog-count"></span>
+            <span id="catalog-sort"></span>
+          </div>
+          <div class="list" id="catalog-list"></div>
+          <div class="empty" id="catalog-empty" hidden>
+            <h3>לא נמצאו מוצרים</h3>
+            <p>נסו מילה כללית יותר, או בחרו קטגוריה אחרת.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-list" data-panel="list">
+          <div class="meta-line">
+            <span id="list-count"></span>
+            <button class="ghost-btn" id="clear-list" type="button" style="width:auto;margin:0;padding:6px 10px;font-size:0.85rem">פינוי הרשימה</button>
+          </div>
+          <div class="list" id="shop-list"></div>
+          <div class="empty" id="list-empty" hidden>
+            <h3>הרשימה ריקה</h3>
+            <p>חפשו מוצר או דפדפו בקטגוריות, והוסיפו פריטים לסל.</p>
+          </div>
+        </section>
+
+        <section class="panel layout-wide" id="panel-compare" data-panel="compare">
+          <div id="compare-root"></div>
+        </section>
+
+        <section class="panel" id="panel-more" data-panel="more">
+          <h2 style="margin:6px 0 12px">הגדרות</h2>
+          <div class="toggles">
+            <label class="toggle">
+              <div>
+                <strong>סניפי סופרמרקט</strong>
+                <p>רמי לוי, יוחננוף, קרפור, נטו, ושופרסל בעיר — תמיד מוצגים.</p>
+              </div>
+              <div class="switch"><input type="checkbox" checked disabled /><span></span></div>
+            </label>
+            <label class="toggle">
+              <div>
+                <strong>כולל פארמים</strong>
+                <p>סופר-פארם ביג, סופר-פארם צומת גיבור, ו-Be בקניון שמונה סנטר.</p>
+              </div>
+              <div class="switch"><input id="tog-pharm" type="checkbox" /><span></span></div>
+            </label>
+            <label class="toggle">
+              <div>
+                <strong>כולל חנויות נוחות וצמתים</strong>
+                <p>יילו בשדרות תל חי, יילו צומת כח, ודור אלון בצומת הגומא.</p>
+              </div>
+              <div class="switch"><input id="tog-conv" type="checkbox" /><span></span></div>
+            </label>
+            <label class="toggle">
+              <div>
+                <strong>חשב מבצעים פשוטים</strong>
+                <p>רק מבצע עם מחיר יעד וכמות מינימום, בלי מועדון ובלי קופון. שאר המבצעים יוצגו לצד המוצר ולא ייכנסו לסכום.</p>
+              </div>
+              <div class="switch"><input id="tog-promo" type="checkbox" /><span></span></div>
+            </label>
+          </div>
+          <button class="install-btn" id="install-btn" type="button">התקנה במסך הבית</button>
+          <div class="about">
+            <h3>איך מתקינים בטלפון</h3>
+            <p><strong>אנדרואיד / כרום:</strong> תפריט הדפדפן ← «הוספה למסך הבית» או הכפתור למעלה.</p>
+            <p><strong>אייפון:</strong> כפתור השיתוף (ריבוע עם חץ) ← «הוספה למסך הבית».</p>
+            <p>אחרי ההתקנה האפליקציה נפתחת כמסך מלא, והקטלוג האחרון שנשמר זמין גם בלי קליטה.</p>
+            <h3 style="margin-top:16px">מקור הנתונים</h3>
+            <p id="about-source"></p>
+            <p>המוצרים משווים בין הרשתות לפי ברקוד. לקובצי החוק אין קטגוריות, לכן החלוקה למחלקות נעשית לפי עץ הקטגוריות של הרשתות (שופרסל / רמי לוי) וסיווג אוטומטי לפי שם המוצר.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <nav class="bottom-nav" aria-label="ניווט ראשי">
+      <button type="button" data-go="catalog" class="active">🛒<span>קטלוג</span></button>
+      <button type="button" data-go="list">📝<span>הרשימה שלי</span><i class="count" id="nav-list-count">0</i></button>
+      <button type="button" data-go="compare">⚖️<span>השוואה</span></button>
+      <button type="button" data-go="more">⚙️<span>עוד</span></button>
+    </nav>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

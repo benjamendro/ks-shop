@@ -1,0 +1,536 @@
+{
+  "generated_at": "2026-11-13T22:45:09+03:00",
+  "timezone": "Asia/Amman",
+  "as_of": "2026-11-13",
+  "source": "https://www.over.org.il/api/prices",
+  "source_law": "https://www.gov.il/he/pages/cpfta_prices_regulations",
+  "attribution": "המחירים לפי קובצי שקיפות המחירים שהרשתות מפרסמות, דרך גרסאות לעם (over.org.il). מחיר מדף; מבצעים מוצגים בנפרד ואינם מקוזזים אוטומטית.",
+  "city": "קריית שמונה",
+  "n_products": 37033,
+  "n_tofu": 31,
+  "stores": [
+    {
+      "id": "cerberus:ramilevi:38",
+      "chain": "cerberus:ramilevi",
+      "chain_name": "רמי לוי",
+      "store_id": "38",
+      "name": "רמי לוי",
+      "short": "רמי לוי",
+      "address": "אזור תעשייה צפוני",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#1f7a4d",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 06:00",
+      "n_items": 13128,
+      "n_promos": 2521
+    },
+    {
+      "id": "cerberus:yohananof:39",
+      "chain": "cerberus:yohananof",
+      "chain_name": "יוחננוף",
+      "store_id": "39",
+      "name": "יוחננוף",
+      "short": "יוחננוף",
+      "address": "שדרות תל חי 93",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#c45c26",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 00:40",
+      "n_items": 10107,
+      "n_promos": 1238
+    },
+    {
+      "id": "carrefour:carrefour:129",
+      "chain": "carrefour:carrefour",
+      "chain_name": "קרפור",
+      "store_id": "129",
+      "name": "קרפור",
+      "short": "קרפור",
+      "address": "טשרניחובסקי 4",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#184fa2",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 05:10",
+      "n_items": 9384,
+      "n_promos": 1818
+    },
+    {
+      "id": "bina:supersapir:22",
+      "chain": "bina:supersapir",
+      "chain_name": "נטו חיסכון",
+      "store_id": "22",
+      "name": "נטו חיסכון / סופר ספיר",
+      "short": "נטו",
+      "address": "היהלום 8, א.ת. דרומי",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#0f7a8a",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 04:53",
+      "n_items": 7887,
+      "n_promos": 971
+    },
+    {
+      "id": "shufersal:shufersal:97",
+      "chain": "shufersal:shufersal",
+      "chain_name": "שופרסל",
+      "store_id": "97",
+      "name": "שופרסל דיל (ביג)",
+      "short": "שופרסל דיל",
+      "address": "מתחם ביג",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#d12c2c",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 03:00",
+      "n_items": 8155,
+      "n_promos": 1578
+    },
+    {
+      "id": "shufersal:shufersal:250",
+      "chain": "shufersal:shufersal",
+      "chain_name": "שופרסל",
+      "store_id": "250",
+      "name": "שופרסל צומת מצודות",
+      "short": "צומת מצודות",
+      "address": "צומת מצודות",
+      "kind": "supermarket",
+      "nearby": false,
+      "color": "#9b1c1c",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 03:00",
+      "n_items": 7683,
+      "n_promos": 1546
+    },
+    {
+      "id": "superpharm:superpharm:192",
+      "chain": "superpharm:superpharm",
+      "chain_name": "סופר-פארם",
+      "store_id": "192",
+      "name": "סופר-פארם ביג",
+      "short": "ס-פארם ביג",
+      "address": "מתחם ביג, א.ת. דרומי",
+      "kind": "pharmacy",
+      "nearby": false,
+      "color": "#0b6e4f",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 07:11",
+      "n_items": 8078,
+      "n_promos": 785
+    },
+    {
+      "id": "superpharm:superpharm:42",
+      "chain": "superpharm:superpharm",
+      "chain_name": "סופר-פארם",
+      "store_id": "42",
+      "name": "סופר-פארם צומת גיבור",
+      "short": "ס-פארם גיבור",
+      "address": "הנשיא 4",
+      "kind": "pharmacy",
+      "nearby": false,
+      "color": "#0b6e4f",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 07:06",
+      "n_items": 8080,
+      "n_promos": 691
+    },
+    {
+      "id": "shufersal:shufersal:657",
+      "chain": "shufersal:shufersal",
+      "chain_name": "Be",
+      "store_id": "657",
+      "name": "Be קריית שמונה",
+      "short": "Be",
+      "address": "קניון שמונה סנטר, טשרניחובסקי 4",
+      "kind": "pharmacy",
+      "nearby": false,
+      "color": "#6b2d5b",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 03:00",
+      "n_items": 3948,
+      "n_promos": 888
+    },
+    {
+      "id": "cerberus:paz_bo:313",
+      "chain": "cerberus:paz_bo",
+      "chain_name": "יינות ביתן / יילו",
+      "store_id": "313",
+      "name": "יילו שדרות תל חי",
+      "short": "יילו תל חי",
+      "address": "שדרות תל חי",
+      "kind": "convenience",
+      "nearby": false,
+      "color": "#f0a202",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 00:20",
+      "n_items": 1961,
+      "n_promos": 746
+    },
+    {
+      "id": "cerberus:doralon:658",
+      "chain": "cerberus:doralon",
+      "chain_name": "דור אלון",
+      "store_id": "658",
+      "name": "דור אלון צומת הגומא",
+      "short": "צומת הגומא",
+      "address": "כביש 90, צומת הגומא",
+      "kind": "convenience",
+      "nearby": true,
+      "color": "#e07a3d",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 00:25",
+      "n_items": 1920,
+      "n_promos": 332
+    },
+    {
+      "id": "cerberus:paz_bo:430",
+      "chain": "cerberus:paz_bo",
+      "chain_name": "יינות ביתן / יילו",
+      "store_id": "430",
+      "name": "יילו צומת כח",
+      "short": "צומת כח",
+      "address": "מפגש כביש 90 עם כביש 899",
+      "kind": "convenience",
+      "nearby": true,
+      "color": "#f0a202",
+      "as_of": "2026-11-13",
+      "file_time": "2026-11-13 00:25",
+      "n_items": 1662,
+      "n_promos": 682
+    }
+  ],
+  "categories": [
+    {
+      "id": "produce",
+      "name": "פירות וירקות",
+      "emoji": "🥬",
+      "subs": [
+        {
+          "id": "fruit",
+          "name": "פירות"
+        },
+        {
+          "id": "veg",
+          "name": "ירקות"
+        },
+        {
+          "id": "herbs",
+          "name": "עשבי תיבול וירק עלים"
+        },
+        {
+          "id": "produce_pack",
+          "name": "אריזות ומוכן"
+        }
+      ]
+    },
+    {
+      "id": "meat",
+      "name": "בשר, עוף ודגים",
+      "emoji": "🥩",
+      "subs": [
+        {
+          "id": "beef",
+          "name": "בקר וכבש"
+        },
+        {
+          "id": "poultry",
+          "name": "עוף והודו"
+        },
+        {
+          "id": "fish",
+          "name": "דגים ופירות ים"
+        },
+        {
+          "id": "meat_proc",
+          "name": "מוצרים מעובדים"
+        }
+      ]
+    },
+    {
+      "id": "deli",
+      "name": "מעדנייה וסלטים",
+      "emoji": "🥗",
+      "subs": [
+        {
+          "id": "salads",
+          "name": "סלטים וחומוס"
+        },
+        {
+          "id": "sausage",
+          "name": "נקניקים ופסטרה"
+        },
+        {
+          "id": "cheese_deli",
+          "name": "גבינות קשות ומעדנייה"
+        },
+        {
+          "id": "pickles",
+          "name": "חמוצים וזיתים"
+        },
+        {
+          "id": "deli_ready",
+          "name": "מוכן לאכילה"
+        }
+      ]
+    },
+    {
+      "id": "dairy",
+      "name": "חלב, ביצים ומן הצומח",
+      "emoji": "🥛",
+      "subs": [
+        {
+          "id": "milk",
+          "name": "חלב ומשקאות חלב"
+        },
+        {
+          "id": "yogurt",
+          "name": "יוגורט ומעדנים"
+        },
+        {
+          "id": "cheese",
+          "name": "גבינות"
+        },
+        {
+          "id": "butter",
+          "name": "חמאה, שמנת ומרגרינה"
+        },
+        {
+          "id": "eggs",
+          "name": "ביצים"
+        },
+        {
+          "id": "plant",
+          "name": "תחליפים ומן הצומח"
+        }
+      ]
+    },
+    {
+      "id": "bakery",
+      "name": "לחמים ומאפים",
+      "emoji": "🍞",
+      "subs": [
+        {
+          "id": "bread",
+          "name": "לחמים ופיתות"
+        },
+        {
+          "id": "pastry",
+          "name": "מאפים מתוקים ומלוחים"
+        },
+        {
+          "id": "bakery_other",
+          "name": "אחר"
+        }
+      ]
+    },
+    {
+      "id": "frozen",
+      "name": "קפואים",
+      "emoji": "❄️",
+      "subs": [
+        {
+          "id": "frozen_veg",
+          "name": "ירקות ופירות קפואים"
+        },
+        {
+          "id": "frozen_meat",
+          "name": "בשר, עוף ודגים קפואים"
+        },
+        {
+          "id": "ice_cream",
+          "name": "גלידות"
+        },
+        {
+          "id": "frozen_ready",
+          "name": "מוכנים, פיצות ושניצלים"
+        }
+      ]
+    },
+    {
+      "id": "dry",
+      "name": "בישול, שימורים ויבש",
+      "emoji": "🍝",
+      "subs": [
+        {
+          "id": "pasta_rice",
+          "name": "פסטה, אורז ודגנים"
+        },
+        {
+          "id": "oil_spice",
+          "name": "שמנים, רטבים ותבלינים"
+        },
+        {
+          "id": "cans",
+          "name": "שימורים וקטניות"
+        },
+        {
+          "id": "baking",
+          "name": "אפייה וסוכר"
+        },
+        {
+          "id": "spread",
+          "name": "ממרחים, ריבות ודגנים"
+        },
+        {
+          "id": "soup",
+          "name": "מרקים ותערובות"
+        }
+      ]
+    },
+    {
+      "id": "snacks",
+      "name": "חטיפים, מתוקים ודגני בוקר",
+      "emoji": "🍪",
+      "subs": [
+        {
+          "id": "chips",
+          "name": "חטיפים מלוחים"
+        },
+        {
+          "id": "sweets",
+          "name": "שוקולד, סוכריות ועוגיות"
+        },
+        {
+          "id": "cereal",
+          "name": "דגני בוקר וחטיפי בריאות"
+        },
+        {
+          "id": "nuts",
+          "name": "פיצוחים, גרעינים ופירות יבשים"
+        }
+      ]
+    },
+    {
+      "id": "drinks",
+      "name": "משקאות",
+      "emoji": "🥤",
+      "subs": [
+        {
+          "id": "water",
+          "name": "מים"
+        },
+        {
+          "id": "soft",
+          "name": "משקאות קלים ומיצים"
+        },
+        {
+          "id": "hot",
+          "name": "קפה, תה וקקאו"
+        },
+        {
+          "id": "alcohol",
+          "name": "אלכוהול"
+        }
+      ]
+    },
+    {
+      "id": "baby",
+      "name": "תינוקות וילדים",
+      "emoji": "🍼",
+      "subs": [
+        {
+          "id": "formula",
+          "name": "תמ\"ל ומזון תינוקות"
+        },
+        {
+          "id": "diapers",
+          "name": "חיתולים ומגבונים"
+        },
+        {
+          "id": "baby_care",
+          "name": "טיפוח וציוד"
+        }
+      ]
+    },
+    {
+      "id": "hygiene",
+      "name": "פארם, היגיינה וטיפוח",
+      "emoji": "🧴",
+      "subs": [
+        {
+          "id": "hygiene_body",
+          "name": "רחצה, שיער ופה"
+        },
+        {
+          "id": "hygiene_paper",
+          "name": "נייר טואלט וטישו"
+        },
+        {
+          "id": "pharmacy",
+          "name": "פארם, בריאות ואיפור"
+        }
+      ]
+    },
+    {
+      "id": "cleaning",
+      "name": "ניקיון לבית",
+      "emoji": "🧹",
+      "subs": [
+        {
+          "id": "laundry",
+          "name": "כביסה"
+        },
+        {
+          "id": "dishes",
+          "name": "כלים"
+        },
+        {
+          "id": "home_clean",
+          "name": "ניקוי הבית"
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "name": "בעלי חיים",
+      "emoji": "🐾",
+      "subs": [
+        {
+          "id": "pet_food",
+          "name": "מזון"
+        },
+        {
+          "id": "pet_care",
+          "name": "ציוד וטיפוח"
+        }
+      ]
+    },
+    {
+      "id": "household",
+      "name": "בית, חד-פעמי ופנאי",
+      "emoji": "🏠",
+      "subs": [
+        {
+          "id": "disposable",
+          "name": "חד-פעמי"
+        },
+        {
+          "id": "kitchen",
+          "name": "כלי מטבח וניילון"
+        },
+        {
+          "id": "home_other",
+          "name": "בית, חשמל ופנאי"
+        }
+      ]
+    },
+    {
+      "id": "other",
+      "name": "אחר",
+      "emoji": "📦",
+      "subs": [
+        {
+          "id": "other",
+          "name": "לא סווג"
+        }
+      ]
+    }
+  ],
+  "category_source": {
+    "method": "keyword classifier modeled on the Shufersal / Rami Levy department tree",
+    "note": "לקובצי החוק ול-Over אין שדה קטגוריה. הסיווג נעשה לפי מילות מפתח בעברית, בעדיפות לביטויים ספציפיים, עם דריסת 'קפוא' לקטגוריית הקפואים."
+  }
+}
