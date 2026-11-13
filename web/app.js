@@ -8,7 +8,7 @@
   const FINALS = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
   const ILS = new Intl.NumberFormat("he-IL", { style: "currency", currency: "ILS" });
   const PAGE = 40;
-  const PANELS = ["catalog", "list", "compare", "more"];
+  const PANELS = ["catalog", "list", "baskets", "compare", "more"];
   const UNIT_MAP = {
     "גרם": ["kg", 0.001, "לק״ג"],
     "גרמים": ["kg", 0.001, "לק״ג"],
@@ -38,6 +38,7 @@
     recents: [],
     suggestItems: [],
     suggestIdx: -1,
+    baskets: null,
   };
 
   const $ = (id) => document.getElementById(id);
@@ -452,7 +453,12 @@
     if (btn) {
       btn.addEventListener("click", () => {
         if (!lastAction) return;
-        setQty(lastAction.id, lastAction.prev, { silent: true });
+        if (lastAction.type === "replace-list") {
+          state.list = lastAction.prev;
+          saveList();
+        } else {
+          setQty(lastAction.id, lastAction.prev, { silent: true });
+        }
         lastAction = null;
         el.hidden = true;
         refreshVisible();
@@ -757,7 +763,252 @@
     return { items, rows, winner, commonCodes, splitTotal, splitGroups, splitMissing, two };
   }
 
+
+  function lookupByBarcode(code) {
+    if (!code) return null;
+    const key = String(code);
+    const direct = state.byId.get(key);
+    if (direct && String(direct.c) === key) return direct;
+    const hits = state.products.filter((p) => String(p.c) === key);
+    if (!hits.length) return direct || null;
+    const idxs = state.meta ? enabledStoreIdx() : [];
+    hits.sort((a, b) => {
+      const ca = idxs.filter((i) => a.p[i] != null).length;
+      const cb = idxs.filter((i) => b.p[i] != null).length;
+      return cb - ca;
+    });
+    return hits[0];
+  }
+
+  function resolveBasketProducts(item) {
+    const codes = [item.barcode, ...(item.fallbacks || [])].filter(Boolean).map(String);
+    const out = [];
+    const seen = new Set();
+    for (const c of codes) {
+      const p = lookupByBarcode(c);
+      if (p && !seen.has(p._id)) {
+        out.push(p);
+        seen.add(p._id);
+      }
+    }
+    return out;
+  }
+
+  function priceBasketItem(item, storeIdx, qty = 1) {
+    const products = resolveBasketProducts(item);
+    for (const p of products) {
+      const lc = lineCost(p, storeIdx, qty);
+      if (lc) {
+        return { p, lc, usedFallback: String(p.c) !== String(item.barcode || "") };
+      }
+    }
+    return null;
+  }
+
+  function compareNamedBasket(basket) {
+    const idxs = enabledStoreIdx();
+    const items = basket.items || [];
+    const rows = idxs.map((i) => {
+      const store = state.meta.stores[i];
+      let total = 0;
+      const found = [];
+      const missing = [];
+      const promos = [];
+      for (const item of items) {
+        const hit = priceBasketItem(item, i);
+        if (!hit) missing.push(item);
+        else {
+          total += hit.lc.cost;
+          found.push({ item, ...hit });
+          if (hit.lc.promo) promos.push({ item, ...hit });
+        }
+      }
+      return { i, store, total, found, missing, promos, allIn: missing.length === 0 && items.length > 0 };
+    });
+    let winner = null;
+    for (const r of rows) {
+      if (!items.length) break;
+      if (
+        !winner ||
+        r.missing.length < winner.missing.length ||
+        (r.missing.length === winner.missing.length && r.total < winner.total)
+      ) {
+        winner = r;
+      }
+    }
+    const comparable = winner
+      ? rows.filter((r) => r.missing.length === winner.missing.length && r.found.length)
+      : [];
+    const dearest = comparable.length
+      ? comparable.reduce((a, b) => (a.total >= b.total ? a : b))
+      : null;
+    const saved = winner && dearest && dearest.i !== winner.i ? dearest.total - winner.total : 0;
+    const ranked = rows.slice().sort((a, b) => a.missing.length - b.missing.length || a.total - b.total);
+    const mapped = items.filter((it) => resolveBasketProducts(it).length).length;
+    return { items, rows, ranked, winner, dearest, saved, mapped };
+  }
+
+  function matchLabel(m) {
+    if (m === "missing") return "חסר בקטלוג";
+    if (m === "substitute") return "החלפה";
+    if (m === "standard") return "מקביל סטנדרטי";
+    if (m === "fallback") return "ברקוד גיבוי";
+    return "התאמה מדויקת";
+  }
+
+  function renderBaskets() {
+    const root = $("baskets-root");
+    if (!root) return;
+    const asOf = state.meta && state.meta.as_of ? fmtDate(state.meta.as_of) : "";
+    if (!state.baskets || !state.baskets.length) {
+      root.innerHTML = `<div class="empty">
+        <h3>לא הצלחתי לטעון את הסלים</h3>
+        <p>נסו לרענן את העמוד. ההשוואה מחושבת מול הקטלוג העדכני של הסניפים בעיר.</p>
+      </div>`;
+      return;
+    }
+    const intro = `<div class="baskets-intro">
+      <h2>סלים מוכרים</h2>
+      <p>שלושה סלי מדד שמשמשים בישראל להשוואת יוקר המחיה, מחושבים מול מחירי המדף הנוכחיים בסניפי קריית שמונה${asOf ? ` (נכון ל־${esc(asOf)})` : ""}. המחירים מתעדכנים עם הרענון היומי של הקטלוג.</p>
+    </div>`;
+
+    const cards = state.baskets.map((basket) => {
+      const cmp = compareNamedBasket(basket);
+      const w = cmp.winner;
+      const src = (basket.sources || []).map((s) =>
+        `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a></li>`
+      ).join("");
+      let hero;
+      if (!w || !w.found.length) {
+        hero = `<div class="basket-hero"><p>אין מחירים זמינים לסניפים שנבחרו.</p></div>`;
+      } else {
+        const missTxt = w.missing.length
+          ? ` · חסרים ${w.missing.length} פריטים בסניף זה`
+          : " · כל הפריטים שנמצאו בקטלוג";
+        const saveTxt = cmp.saved > 0.009
+          ? `<p class="save">חוסכים ${fmtPrice(cmp.saved)} לעומת ${esc(cmp.dearest.store.name)}</p>`
+          : "";
+        hero = `<div class="basket-hero">
+          <p>הסניף הזול ביותר לקריית שמונה</p>
+          <h4>${esc(w.store.name)}</h4>
+          <div class="sum">${fmtPrice(w.total)}</div>
+          ${saveTxt}
+          <p>${w.found.length} מתוך ${cmp.items.length} פריטים${missTxt}</p>
+        </div>`;
+      }
+      const rank = cmp.ranked.map((r, idx) => {
+        const win = w && r.i === w.i;
+        const delta = w && !win && r.missing.length === w.missing.length && r.total > w.total
+          ? `<div class="delta">+${fmtPrice(r.total - w.total)} יותר</div>`
+          : (win ? `<div class="delta">הכי זול</div>` : "");
+        return `<article class="store-card ${win ? "winner" : ""}">
+          <div class="head">
+            <div>
+              <h3><span class="rank">${idx + 1}</span>${win ? "🏆 " : ""}${esc(r.store.name)}</h3>
+              <div class="addr">${esc(r.store.address || "")}${r.store.nearby ? " · ליד העיר" : ""}</div>
+            </div>
+            <div>
+              <div class="total">${r.found.length ? fmtPrice(r.total) : "—"}</div>
+              ${delta}
+            </div>
+          </div>
+          <div class="stats">
+            <span class="pill ${r.missing.length ? "warn" : "good"}">${r.found.length} מתוך ${cmp.items.length} פריטים</span>
+          </div>
+        </article>`;
+      }).join("");
+
+      const storeHead = cmp.rows.map((r) => `<th>${esc(r.store.name)}</th>`).join("");
+      const body = cmp.items.map((item) => {
+        const products = resolveBasketProducts(item);
+        const catalogName = products.length ? products[0].n : "";
+        const flag = item.match && item.match !== "exact"
+          ? `<span class="basket-flag ${esc(item.match)}">${esc(matchLabel(item.match))}</span>`
+          : "";
+        const cells = cmp.rows.map((r) => {
+          const hit = priceBasketItem(item, r.i);
+          if (!hit) return `<td class="miss">חסר</td>`;
+          const best = cmp.rows
+            .map((x) => priceBasketItem(item, x.i))
+            .filter(Boolean)
+            .map((h) => h.lc.cost);
+          const isBest = best.length && hit.lc.cost === Math.min(...best);
+          const fb = hit.usedFallback ? `<div class="item-sub">גיבוי</div>` : "";
+          return `<td class="${isBest ? "best" : ""}">${fmtPrice(hit.lc.cost)}${fb}</td>`;
+        }).join("");
+        const sub = [item.brand, item.size, catalogName && catalogName !== item.name ? catalogName : ""]
+          .filter(Boolean).join(" · ");
+        return `<tr>
+          <td>
+            ${flag}<span class="item-name">${esc(item.name)}</span>
+            ${sub ? `<span class="item-sub">${esc(sub)}</span>` : ""}
+            ${item.note && (item.match === "substitute" || item.match === "missing") ? `<span class="item-sub">${esc(item.note)}</span>` : ""}
+          </td>
+          ${cells}
+        </tr>`;
+      }).join("");
+
+      const subst = (basket.items || []).filter((i) => i.match === "substitute").length;
+      const missMap = (basket.items || []).filter((i) => i.match === "missing" || !resolveBasketProducts(i).length).length;
+
+      return `<article class="basket-card" data-basket="${esc(basket.id)}">
+        <div class="basket-head">
+          <p class="basket-kicker">${esc(basket.publisher || "")} · ${esc(basket.date_label || basket.date || "")}</p>
+          <h3>${esc(basket.title)}</h3>
+          <p class="basket-kicker">${esc(basket.short || "")} · ${cmp.mapped} מתוך ${cmp.items.length} פריטים ממופים לקטלוג</p>
+        </div>
+        <p class="basket-desc">${esc(basket.description || "")}</p>
+        ${basket.note ? `<p class="basket-note">${esc(basket.note)}</p>` : ""}
+        <ul class="basket-sources">${src}</ul>
+        ${hero}
+        <div class="basket-actions">
+          <button type="button" class="primary-btn" data-load-basket="${esc(basket.id)}">טען לרשימת הקניות</button>
+        </div>
+        <p class="hint coverage-pill">${subst ? `${subst} החלפות מסומנות בטבלה. ` : ""}${missMap ? `${missMap} פריטים לא נמצאו בקטלוג. ` : ""}הסכום כולל רק פריטים שיש להם מחיר בסניף.</p>
+        <div class="basket-rank">${rank}</div>
+        <details class="matrix-block">
+          <summary>טבלת מחירים לפי מוצר</summary>
+          <div class="matrix-wrap">
+            <table class="matrix">
+              <thead><tr><th>מוצר</th>${storeHead}</tr></thead>
+              <tbody>${body}</tbody>
+            </table>
+          </div>
+        </details>
+      </article>`;
+    }).join("");
+
+    root.innerHTML = intro + cards;
+  }
+
+  function loadBasketToList(id) {
+    const basket = (state.baskets || []).find((b) => b.id === id);
+    if (!basket) return;
+    const entries = [];
+    for (const item of basket.items || []) {
+      const products = resolveBasketProducts(item);
+      if (!products.length) continue;
+      entries.push({ c: products[0]._id, qty: 1 });
+    }
+    if (!entries.length) {
+      showToast("לא נמצאו מוצרים לטעינה מהסל הזה", false);
+      return;
+    }
+    if (state.list.length) {
+      const ok = window.confirm(`הטעינה תחליף את הרשימה הנוכחית (${state.list.length} פריטים) ב־${entries.length} פריטים מ«${basket.title}». להמשיך?`);
+      if (!ok) return;
+    }
+    lastAction = { type: "replace-list", prev: state.list.map((x) => ({ ...x })) };
+    state.list = entries;
+    saveList();
+    const skipped = (basket.items || []).length - entries.length;
+    const extra = skipped ? ` · ${skipped} פריטים לא נמצאו בקטלוג` : "";
+    showToast(`נטענו ${entries.length} פריטים מ«${basket.title}» לרשימה${extra}`, true);
+    renderChrome();
+  }
+
   function renderCompare() {
+
     const root = $("compare-root");
     const asOf = state.meta && state.meta.as_of ? fmtDate(state.meta.as_of) : "";
     if (!state.list.length) {
@@ -1019,12 +1270,14 @@
     const titles = {
       catalog: "הסל הזול — קריית שמונה",
       list: "רשימת הקניות — הסל הזול",
+      baskets: "סלים מוכרים — הסל הזול",
       compare: "השוואת הסל — הסל הזול",
       more: "הגדרות — הסל הזול",
     };
     document.title = titles[name] || titles.catalog;
     if (name === "catalog") renderCatalogPane();
     else if (name === "list") renderShopList();
+    else if (name === "baskets") renderBaskets();
     else if (name === "compare") renderCompare();
     renderChrome();
     window.scrollTo(0, 0);
@@ -1042,6 +1295,7 @@
   function renderAll() {
     if (state.panel === "catalog") renderCatalogPane();
     else if (state.panel === "list") renderShopList();
+    else if (state.panel === "baskets") renderBaskets();
     else if (state.panel === "compare") renderCompare();
     renderChrome();
   }
@@ -1053,6 +1307,7 @@
       renderCatalog(true);
       while (state.shown < keep && state.shown < state.filtered.length) renderCatalog(false);
     } else if (state.panel === "list") renderShopList();
+    else if (state.panel === "baskets") renderBaskets();
     else if (state.panel === "compare") renderCompare();
     else renderRecents();
     renderChrome();
@@ -1237,6 +1492,13 @@
     document.querySelectorAll(".bottom-nav button, .desk-nav button").forEach((b) => {
       b.addEventListener("click", () => showPanel(b.dataset.go));
     });
+    document.addEventListener("click", (e) => {
+      const loadBtn = e.target.closest("[data-load-basket]");
+      if (loadBtn) {
+        e.preventDefault();
+        loadBasketToList(loadBtn.getAttribute("data-load-basket"));
+      }
+    });
 
     window.addEventListener("hashchange", () => {
       const name = parseHash();
@@ -1354,6 +1616,13 @@
       bar.style.width = "96%";
       msg.textContent = "מכין חיפוש וקטגוריות…";
       prepareProducts(products);
+      try {
+        const pack = await fetchJson("data/baskets.json");
+        state.baskets = (pack && pack.baskets) || [];
+      } catch (e) {
+        console.warn("baskets.json", e);
+        state.baskets = [];
+      }
       fillAbout();
       state.ready = true;
       $("boot").style.display = "none";

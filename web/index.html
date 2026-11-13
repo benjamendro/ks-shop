@@ -51,6 +51,7 @@
           <nav class="desk-nav" aria-label="ניווט ראשי">
             <button type="button" data-go="catalog" class="active">קטלוג</button>
             <button type="button" data-go="list">הרשימה <i class="count nav-list-count">0</i></button>
+            <button type="button" data-go="baskets">סלים מוכרים</button>
             <button type="button" data-go="compare">השוואה</button>
             <button type="button" data-go="more">עוד</button>
           </nav>
@@ -110,6 +111,11 @@
           </div>
         </section>
 
+
+        <section class="panel layout-wide" id="panel-baskets" data-panel="baskets">
+          <div id="baskets-root"></div>
+        </section>
+
         <section class="panel layout-wide" id="panel-compare" data-panel="compare">
           <div id="compare-root"></div>
         </section>
@@ -154,7 +160,7 @@
             <p>אחרי ההתקנה האפליקציה נפתחת כמסך מלא, והקטלוג האחרון שנשמר זמין גם בלי קליטה.</p>
             <h3 style="margin-top:16px">מקור הנתונים</h3>
             <p id="about-source"></p>
-            <p>המוצרים משווים בין הרשתות לפי ברקוד: אותו ברקוד = כרטיס אחד עם המחיר בכל סופר. לקובצי החוק אין קטגוריות, לכן החלוקה למחלקות נעשית לפי עץ הקטגוריות של הרשתות (שופרסל / רמי לוי) וסיווג אוטומטי לפי שם המוצר.</p>
+            <p>בעמוד «סלים מוכרים» אפשר להשוות שלושה סלי מדד מוכרים בישראל מול מחירי הסניפים בעיר. המוצרים משווים בין הרשתות לפי ברקוד: אותו ברקוד = כרטיס אחד עם המחיר בכל סופר. לקובצי החוק אין קטגוריות, לכן החלוקה למחלקות נעשית לפי עץ הקטגוריות של הרשתות (שופרסל / רמי לוי) וסיווג אוטומטי לפי שם המוצר.</p>
           </div>
         </section>
       </main>
@@ -169,6 +175,7 @@
     <nav class="bottom-nav" aria-label="ניווט ראשי">
       <button type="button" data-go="catalog" class="active">🛒<span>קטלוג</span></button>
       <button type="button" data-go="list">📝<span>הרשימה</span><i class="count nav-list-count" id="nav-list-count">0</i></button>
+      <button type="button" data-go="baskets">🧺<span>סלים</span></button>
       <button type="button" data-go="compare">⚖️<span>השוואה</span></button>
       <button type="button" data-go="more">⚙️<span>עוד</span></button>
     </nav>

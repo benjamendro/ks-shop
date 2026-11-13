@@ -603,7 +603,7 @@ details.missing li { font-size: 0.88rem; margin: 4px 0; }
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   z-index: 30;
 }
 .bottom-nav button {
@@ -614,11 +614,12 @@ details.missing li { font-size: 0.88rem; margin: 4px 0; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  font-size: 0.72rem;
+  gap: 1px;
+  font-size: 0.66rem;
   font-weight: 700;
   position: relative;
   min-height: 48px;
+  padding: 4px 2px;
 }
 .bottom-nav button.active { color: var(--brand); }
 .bottom-nav .count {
@@ -746,4 +747,126 @@ body.has-fab .main { padding-bottom: calc(var(--nav-h) + var(--safe-b) + 88px); 
   flex: 0 0 auto;
   align-self: flex-start;
   white-space: nowrap;
+}
+
+
+/* Benchmark baskets page */
+.baskets-intro {
+  margin: 4px 0 16px;
+}
+.baskets-intro h2 { margin: 0 0 6px; font-size: 1.35rem; }
+.baskets-intro p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.basket-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 16px 12px;
+  margin-bottom: 18px;
+}
+.basket-card .basket-head h3 {
+  margin: 0 0 2px;
+  font-size: 1.2rem;
+}
+.basket-card .basket-kicker {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.basket-card .basket-desc,
+.basket-card .basket-note {
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+}
+.basket-card .basket-note { color: var(--muted); }
+.basket-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.basket-sources a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.basket-hero {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1f7a4d, #3da56c);
+  color: #fff;
+}
+.basket-hero p { margin: 0; opacity: 0.92; font-size: 0.9rem; }
+.basket-hero h4 { margin: 4px 0 0; font-size: 1.15rem; }
+.basket-hero .sum { font-size: 1.7rem; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.basket-hero .save {
+  margin-top: 6px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.16);
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.basket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.basket-actions .primary-btn,
+.basket-actions .ghost-btn {
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 800;
+}
+.basket-actions .ghost-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+.primary-btn {
+  border: 0;
+  background: var(--brand);
+  color: #fff;
+}
+.basket-rank { margin-top: 12px; display: grid; gap: 8px; }
+.basket-flag {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.basket-flag.missing { background: var(--danger-soft); color: var(--danger); }
+.basket-flag.exact, .basket-flag.standard { background: var(--brand-soft); color: var(--brand); }
+.matrix .item-name { display: block; font-weight: 700; }
+.matrix .item-sub { display: block; color: var(--muted); font-size: 0.72rem; font-weight: 500; }
+.basket-card details.matrix-block { margin-top: 8px; }
+.basket-card details.matrix-block > summary {
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+.basket-card details.matrix-block > summary::-webkit-details-marker { display: none; }
+.coverage-pill { margin-top: 8px; }
+@media (min-width: 800px) {
+  .desk-nav button { padding: 8px 9px; font-size: 0.92rem; }
 }
