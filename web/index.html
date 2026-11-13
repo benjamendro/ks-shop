@@ -48,40 +48,65 @@
               <small>השוואת מחירים בקריית שמונה</small>
             </div>
           </div>
+          <nav class="desk-nav" aria-label="ניווט ראשי">
+            <button type="button" data-go="catalog" class="active">קטלוג</button>
+            <button type="button" data-go="list">הרשימה <i class="count nav-list-count">0</i></button>
+            <button type="button" data-go="compare">השוואה</button>
+            <button type="button" data-go="more">עוד</button>
+          </nav>
           <div class="as-of" id="as-of" title="תאריך קובץ המחירים"></div>
         </div>
         <div class="search-wrap" id="search-wrap">
           <span class="ico" aria-hidden="true">🔍</span>
-          <input id="q" type="search" enterkeyhint="search" placeholder="חיפוש לפי שם, יצרן או ברקוד" autocomplete="off" />
+          <input id="q" type="search" enterkeyhint="search" placeholder="חיפוש לפי שם, יצרן או ברקוד" autocomplete="off" aria-autocomplete="list" aria-controls="suggest" />
           <button class="clear" id="q-clear" type="button" aria-label="ניקוי חיפוש">×</button>
+          <div id="suggest" class="suggest" hidden role="listbox" aria-label="הצעות חיפוש"></div>
         </div>
       </header>
 
       <div class="cats" id="cats" hidden></div>
       <div class="subs" id="subs"></div>
+      <div class="brands" id="brands" hidden></div>
+      <div class="cat-grid" id="cat-grid" hidden></div>
 
       <main class="main">
         <section class="panel active" id="panel-catalog" data-panel="catalog">
+          <div id="recents" class="recents" hidden></div>
           <div class="meta-line">
             <span id="catalog-count"></span>
-            <span id="catalog-sort"></span>
+            <label class="sort-wrap">
+              <span>מיון</span>
+              <select id="sort-by" aria-label="מיון תוצאות">
+                <option value="relevance">רלוונטיות</option>
+                <option value="price-asc">מחיר: מהזול ליקר</option>
+                <option value="price-desc">מחיר: מהיקר לזול</option>
+                <option value="unit">מחיר לק״ג / לליטר</option>
+                <option value="name">לפי שם</option>
+              </select>
+            </label>
           </div>
           <div class="list" id="catalog-list"></div>
           <div class="empty" id="catalog-empty" hidden>
             <h3>לא נמצאו מוצרים</h3>
-            <p>נסו מילה כללית יותר, או בחרו קטגוריה אחרת.</p>
+            <p>נסו מילה כללית יותר, ברקוד, או בחרו קטגוריה אחרת.</p>
           </div>
         </section>
 
         <section class="panel" id="panel-list" data-panel="list">
-          <div class="meta-line">
-            <span id="list-count"></span>
-            <button class="ghost-btn" id="clear-list" type="button" style="width:auto;margin:0;padding:6px 10px;font-size:0.85rem">פינוי הרשימה</button>
+          <div class="list-hero" id="list-hero">
+            <div>
+              <h2>רשימת הקניות</h2>
+              <p id="list-count"></p>
+              <p class="list-estimate" id="list-total"></p>
+            </div>
+            <button class="ghost-btn danger-btn" id="clear-list" type="button">פינוי הרשימה</button>
           </div>
+          <button class="cta-compare" id="cta-compare" type="button">השווה את הסל</button>
           <div class="list" id="shop-list"></div>
           <div class="empty" id="list-empty" hidden>
             <h3>הרשימה ריקה</h3>
-            <p>חפשו מוצר או דפדפו בקטגוריות, והוסיפו פריטים לסל.</p>
+            <p>חפשו מוצר או דפדפו בקטגוריות, והוסיפו פריטים לסל בלחיצה אחת.</p>
+            <button class="primary-btn" id="empty-to-catalog" type="button">לקטלוג</button>
           </div>
         </section>
 
@@ -90,7 +115,7 @@
         </section>
 
         <section class="panel" id="panel-more" data-panel="more">
-          <h2 style="margin:6px 0 12px">הגדרות</h2>
+          <h2 class="panel-title">הגדרות</h2>
           <div class="toggles">
             <label class="toggle">
               <div>
@@ -129,19 +154,27 @@
             <p>אחרי ההתקנה האפליקציה נפתחת כמסך מלא, והקטלוג האחרון שנשמר זמין גם בלי קליטה.</p>
             <h3 style="margin-top:16px">מקור הנתונים</h3>
             <p id="about-source"></p>
-            <p>המוצרים משווים בין הרשתות לפי ברקוד. לקובצי החוק אין קטגוריות, לכן החלוקה למחלקות נעשית לפי עץ הקטגוריות של הרשתות (שופרסל / רמי לוי) וסיווג אוטומטי לפי שם המוצר.</p>
+            <p>המוצרים משווים בין הרשתות לפי ברקוד: אותו ברקוד = כרטיס אחד עם המחיר בכל סופר. לקובצי החוק אין קטגוריות, לכן החלוקה למחלקות נעשית לפי עץ הקטגוריות של הרשתות (שופרסל / רמי לוי) וסיווג אוטומטי לפי שם המוצר.</p>
           </div>
         </section>
       </main>
     </div>
 
+    <button type="button" id="fab-cart" class="fab-cart" hidden>
+      <span class="fab-count" id="fab-count">0</span>
+      <span class="fab-label">לרשימה</span>
+      <span class="fab-total" id="fab-total"></span>
+    </button>
+
     <nav class="bottom-nav" aria-label="ניווט ראשי">
       <button type="button" data-go="catalog" class="active">🛒<span>קטלוג</span></button>
-      <button type="button" data-go="list">📝<span>הרשימה שלי</span><i class="count" id="nav-list-count">0</i></button>
+      <button type="button" data-go="list">📝<span>הרשימה</span><i class="count nav-list-count" id="nav-list-count">0</i></button>
       <button type="button" data-go="compare">⚖️<span>השוואה</span></button>
       <button type="button" data-go="more">⚙️<span>עוד</span></button>
     </nav>
   </div>
+
+  <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
 
   <script src="app.js" defer></script>
 </body>

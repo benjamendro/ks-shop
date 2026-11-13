@@ -6,3 +6,4 @@ raw/
 logs/
 .DS_Store
 screenshots/
+node_modules/
