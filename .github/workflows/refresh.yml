@@ -39,6 +39,10 @@ jobs:
           print("Over reachable, sample store count:", n)
           PY
       - name: Build full Kiryat Shmona catalog from Over.org.il
+        env:
+          # Actions IPs are easily rate-limited by Over (HTTP 429). Go serial and paced.
+          KS_SHOP_WORKERS: "1"
+          KS_SHOP_MIN_INTERVAL: "0.5"
         run: python -u scripts/build_catalog.py
       - name: Commit updated data if changed
         run: |

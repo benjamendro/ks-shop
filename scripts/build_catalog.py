@@ -13,7 +13,9 @@ convenience stores), joins promotions, classifies products, and writes:
 from __future__ import annotations
 
 import json
+import os
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -102,7 +104,21 @@ def now_iso() -> str:
     return datetime.now(AMMAN).isoformat(timespec="seconds")
 
 
-def api(path: str, params: dict | None = None, timeout: int = 90, retries: int = 5):
+# Global pacing so parallel store fetches cannot stampede Over (Actions IPs get 429s).
+_RATE_LOCK = threading.Lock()
+_NEXT_OK = 0.0
+MIN_INTERVAL = float(os.environ.get("KS_SHOP_MIN_INTERVAL", "0.4"))
+
+
+def _workers() -> int:
+    default = "1" if os.environ.get("GITHUB_ACTIONS") else "3"
+    try:
+        return max(1, int(os.environ.get("KS_SHOP_WORKERS", default)))
+    except ValueError:
+        return 1
+
+
+def api(path: str, params: dict | None = None, timeout: int = 90, retries: int = 10):
     url = BASE + path
     if params:
         clean = {k: v for k, v in params.items() if v is not None}
@@ -110,12 +126,42 @@ def api(path: str, params: dict | None = None, timeout: int = 90, retries: int =
     req = urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": UA})
     last = None
     for attempt in range(retries):
+        global _NEXT_OK
+        with _RATE_LOCK:
+            now = time.monotonic()
+            wait = _NEXT_OK - now
+            if wait > 0:
+                time.sleep(wait)
+            _NEXT_OK = time.monotonic() + MIN_INTERVAL
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 return json.loads(resp.read().decode())
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        except urllib.error.HTTPError as exc:
             last = exc
-            time.sleep(1.2 * (attempt + 1))
+            body_preview = ""
+            try:
+                body_preview = exc.read()[:200].decode("utf-8", "replace")
+            except Exception:
+                pass
+            retryable = exc.code == 429 or exc.code >= 500
+            if not retryable and attempt >= 2:
+                break
+            delay = 1.2 * (attempt + 1)
+            if exc.code == 429:
+                ra = (exc.headers or {}).get("Retry-After")
+                try:
+                    delay = float(ra)
+                except (TypeError, ValueError):
+                    delay = min(120.0, 8.0 * (2 ** attempt))  # 8, 16, 32, 64, 120...
+            elif exc.code >= 500:
+                delay = min(60.0, 3.0 * (2 ** attempt))
+            print(f"  API {exc.code} retry {attempt+1}/{retries} in {delay:.1f}s :: {url[:140]} {body_preview[:80]}", flush=True)
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            last = exc
+            delay = min(60.0, 2.0 * (2 ** attempt))
+            print(f"  API error retry {attempt+1}/{retries} in {delay:.1f}s :: {exc}", flush=True)
+            time.sleep(delay)
     raise RuntimeError(f"API failed after {retries} retries: {url[:180]} :: {last}")
 
 
@@ -137,7 +183,7 @@ def fetch_pages(table: str, params: dict, label: str, order: str = "item_code", 
         if max_rows is not None and len(rows) >= max_rows:
             break
         offset += limit
-        time.sleep(0.05)
+        time.sleep(0.15)
     return rows
 
 
@@ -236,7 +282,7 @@ def build() -> dict:
         else:
             need.append(s)
     if need:
-        with ThreadPoolExecutor(max_workers=3) as pool:
+        with ThreadPoolExecutor(max_workers=_workers()) as pool:
             futs = [pool.submit(job_prices, s) for s in need]
             for fut in as_completed(futs):
                 sk, rows = fut.result()
@@ -273,7 +319,7 @@ def build() -> dict:
         else:
             need_p.append(s)
     if need_p:
-        with ThreadPoolExecutor(max_workers=3) as pool:
+        with ThreadPoolExecutor(max_workers=_workers()) as pool:
             futs = [pool.submit(job_promos, s) for s in need_p]
             for fut in as_completed(futs):
                 sk, rows = fut.result()
@@ -336,7 +382,7 @@ def build() -> dict:
         else:
             need_i[chain] = pids
     if need_i:
-        with ThreadPoolExecutor(max_workers=3) as pool:
+        with ThreadPoolExecutor(max_workers=_workers()) as pool:
             futs = {pool.submit(fetch_promo_items_for_chain, chain, pids): chain
                     for chain, pids in need_i.items()}
             for fut in as_completed(futs):
