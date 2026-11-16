@@ -86,6 +86,7 @@
               </select>
             </label>
           </div>
+          <div class="gen-banner" id="gen-banner" hidden></div>
           <div class="list" id="catalog-list"></div>
           <div class="empty" id="catalog-empty" hidden>
             <h3>לא נמצאו מוצרים</h3>
@@ -94,6 +95,19 @@
         </section>
 
         <section class="panel" id="panel-list" data-panel="list">
+          <div class="smart-add" id="smart-add">
+            <form id="smart-form" class="smart-form" autocomplete="off" role="search">
+              <span class="ico" aria-hidden="true">＋</span>
+              <input id="smart-input" type="text" enterkeyhint="done" placeholder="מה לקנות? למשל: 2 חלב 3%, ביצים L 12, 1 ק״ג עגבניות" aria-label="הוספת פריט לרשימה" aria-autocomplete="list" aria-controls="smart-suggest" />
+              <button type="submit" class="smart-go">הוספה</button>
+              <div id="smart-suggest" class="smart-suggest" hidden role="listbox" aria-label="הצעות"></div>
+            </form>
+            <p class="smart-hint">כותבים מה צריך, לא איזה מותג. בכל סופר נבחר אוטומטית המוצר המשתלם ביותר (לפי מחיר לק״ג / לליטר), ואפשר להחליף או לנעול מותג.</p>
+            <div class="smart-actions">
+              <button type="button" class="ghost-btn" id="open-import">📋 הדבקת רשימה / קובץ</button>
+            </div>
+            <div class="quick-chips" id="quick-chips"></div>
+          </div>
           <div class="list-hero" id="list-hero">
             <div>
               <h2>רשימת הקניות</h2>
@@ -106,8 +120,11 @@
           <div class="list" id="shop-list"></div>
           <div class="empty" id="list-empty" hidden>
             <h3>הרשימה ריקה</h3>
-            <p>חפשו מוצר או דפדפו בקטגוריות, והוסיפו פריטים לסל בלחיצה אחת.</p>
-            <button class="primary-btn" id="empty-to-catalog" type="button">לקטלוג</button>
+            <p>הקלידו מה צריך למעלה, לחצו על מוצרי יסוד, או הדביקו רשימה מוכנה (וואטסאפ, פתקים, קובץ). אפשר גם לבחור מוצר מדויק מהקטלוג.</p>
+            <div class="empty-actions">
+              <button class="primary-btn" type="button" data-open-import>הדבקת רשימה</button>
+              <button class="ghost-btn" id="empty-to-catalog" type="button">לקטלוג</button>
+            </div>
           </div>
         </section>
 
@@ -183,6 +200,43 @@
 
   <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
 
+  <div class="sheet" id="import-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="import-title">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <h3 id="import-title">ייבוא רשימת קניות</h3>
+        <button type="button" class="sheet-x" data-close-sheet aria-label="סגירה">×</button>
+      </div>
+      <div id="import-step1">
+        <p class="hint">הדביקו רשימה מוואטסאפ, מהפתקים או מכל מקום. שורה לכל פריט (או מופרד בפסיקים). כמויות כמו «2 חלב», «חלב x3», «1 ק״ג עגבניות» מזוהות אוטומטית.</p>
+        <textarea id="import-text" rows="9" placeholder="חלב 3%&#10;2 לחם&#10;ביצים L 12&#10;1 ק&quot;ג עגבניות"></textarea>
+        <div class="sheet-row">
+          <label class="ghost-btn file-btn">📄 קובץ ‎.txt / .csv<input type="file" id="import-file" accept=".txt,.csv,text/plain,text/csv" hidden /></label>
+          <button type="button" class="primary-btn" id="import-parse">המשך לבדיקה</button>
+        </div>
+        <p class="hint small">טיפ: מהטלפון אפשר גם «שיתוף» של טקסט ישירות לאפליקציה (אחרי התקנה למסך הבית).</p>
+      </div>
+      <div id="import-step2" hidden>
+        <div class="import-summary" id="import-summary"></div>
+        <div class="import-rows" id="import-rows"></div>
+        <div class="sheet-row sticky-actions">
+          <button type="button" class="ghost-btn" id="import-back">חזרה לעריכה</button>
+          <button type="button" class="primary-btn" id="import-add">הוספה לרשימה</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet" id="pick-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="pick-title">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <h3 id="pick-title">החלפת מוצר</h3>
+        <button type="button" class="sheet-x" data-close-sheet aria-label="סגירה">×</button>
+      </div>
+      <div id="pick-body"></div>
+    </div>
+  </div>
+
+  <script src="generic.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

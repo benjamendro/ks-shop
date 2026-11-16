@@ -36,7 +36,7 @@ async function run() {
   }
 
   async function waitReady(page) {
-    await page.goto(BASE, { waitUntil: "domcontentloaded", timeout: 120000 });
+    await page.goto(BASE.replace(/\/$/, "") + "/#/catalog", { waitUntil: "domcontentloaded", timeout: 120000 });
     await page.waitForSelector("#app.ready", { timeout: 120000 });
   }
 

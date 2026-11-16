@@ -2,12 +2,13 @@
    App shell: cache-first. Catalog data: network-first with cache fallback
    so a daily refresh is picked up when online, and the last catalog works offline.
 */
-const SHELL = "ks-shop-shell-v5";
+const SHELL = "ks-shop-shell-v6";
 const DATA = "ks-shop-data-v1";
 const SHELL_URLS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./generic.js",
   "./app.js",
   "./manifest.webmanifest",
   "./icons/favicon.svg",
