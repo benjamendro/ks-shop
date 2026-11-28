@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-11-27T17:20:01+03:00",
+  "generated_at": "2026-11-28T16:36:20+03:00",
   "timezone": "Asia/Amman",
-  "as_of": "2026-11-27",
+  "as_of": "2026-11-28",
   "source": "https://www.over.org.il/api/prices",
   "source_law": "https://www.gov.il/he/pages/cpfta_prices_regulations",
   "attribution": "המחירים לפי קובצי שקיפות המחירים שהרשתות מפרסמות, דרך גרסאות לעם (over.org.il). מחיר מדף; מבצעים מוצגים בנפרד ואינם מקוזזים אוטומטית.",
   "city": "קריית שמונה",
-  "n_products": 36844,
+  "n_products": 36919,
   "n_tofu": 31,
   "stores": [
     {
@@ -20,10 +20,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#1f7a4d",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 06:00",
-      "n_items": 13105,
-      "n_promos": 2679
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 06:00",
+      "n_items": 13125,
+      "n_promos": 2668
     },
     {
       "id": "cerberus:yohananof:39",
@@ -36,10 +36,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#c45c26",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 00:40",
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 00:40",
       "n_items": 10111,
-      "n_promos": 2632
+      "n_promos": 1305
     },
     {
       "id": "carrefour:carrefour:129",
@@ -52,10 +52,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#184fa2",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 05:10",
-      "n_items": 9394,
-      "n_promos": 1707
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 05:10",
+      "n_items": 9410,
+      "n_promos": 1695
     },
     {
       "id": "bina:supersapir:22",
@@ -68,10 +68,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#0f7a8a",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 05:33",
-      "n_items": 7877,
-      "n_promos": 1092
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 00:04",
+      "n_items": 7948,
+      "n_promos": 1102
     },
     {
       "id": "shufersal:shufersal:97",
@@ -84,10 +84,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#d12c2c",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 04:00",
-      "n_items": 8084,
-      "n_promos": 1677
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 03:00",
+      "n_items": 8079,
+      "n_promos": 273
     },
     {
       "id": "shufersal:shufersal:250",
@@ -100,10 +100,10 @@
       "kind": "supermarket",
       "nearby": false,
       "color": "#9b1c1c",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 04:00",
-      "n_items": 7645,
-      "n_promos": 1623
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 03:00",
+      "n_items": 7650,
+      "n_promos": 248
     },
     {
       "id": "superpharm:superpharm:192",
@@ -116,10 +116,10 @@
       "kind": "pharmacy",
       "nearby": false,
       "color": "#0b6e4f",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 07:15",
-      "n_items": 8209,
-      "n_promos": 892
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 07:09",
+      "n_items": 8210,
+      "n_promos": 888
     },
     {
       "id": "superpharm:superpharm:42",
@@ -132,10 +132,10 @@
       "kind": "pharmacy",
       "nearby": false,
       "color": "#0b6e4f",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 07:11",
-      "n_items": 7533,
-      "n_promos": 755
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 07:14",
+      "n_items": 7560,
+      "n_promos": 756
     },
     {
       "id": "shufersal:shufersal:657",
@@ -148,10 +148,10 @@
       "kind": "pharmacy",
       "nearby": false,
       "color": "#6b2d5b",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 04:00",
-      "n_items": 3945,
-      "n_promos": 921
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 03:00",
+      "n_items": 3938,
+      "n_promos": 922
     },
     {
       "id": "cerberus:paz_bo:313",
@@ -164,9 +164,9 @@
       "kind": "convenience",
       "nearby": false,
       "color": "#f0a202",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 00:20",
-      "n_items": 1945,
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 00:20",
+      "n_items": 1943,
       "n_promos": 756
     },
     {
@@ -180,9 +180,9 @@
       "kind": "convenience",
       "nearby": true,
       "color": "#e07a3d",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 00:25",
-      "n_items": 1900,
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 00:25",
+      "n_items": 1896,
       "n_promos": 335
     },
     {
@@ -196,9 +196,9 @@
       "kind": "convenience",
       "nearby": true,
       "color": "#f0a202",
-      "as_of": "2026-11-27",
-      "file_time": "2026-11-27 00:25",
-      "n_items": 1643,
+      "as_of": "2026-11-28",
+      "file_time": "2026-11-28 00:25",
+      "n_items": 1648,
       "n_promos": 700
     }
   ],
